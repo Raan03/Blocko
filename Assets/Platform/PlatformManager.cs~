@@ -1,0 +1,93 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+
+/// <summary>
+/// This handles our platforms to jump on
+/// </summary>
+public class PlatformManager : MonoBehaviour
+{
+		public Material[] materials;
+		public PhysicMaterial[] physicMaterials;
+		public Transform prefab;
+		public int numberOfObjects;
+		public PowerUp powerup;
+		public float recycleOffset;
+		public Vector3 startPosition;
+		public Vector3 minSize, maxSize, minGap, maxGap;
+		public float minY, maxY;
+		private Vector3 _nextPosition;
+		private Queue<Transform> _objectQueue;
+
+		// Use this for initialization
+		void Start ()
+		{
+				GameEventManager.GameStart += GameStart;
+				GameEventManager.GameOver += GameOver;
+
+				// create our queue of objects
+				_objectQueue = new Queue<Transform> (numberOfObjects);
+				for (int i = 0; i < numberOfObjects; i++) {
+						_objectQueue.Enqueue ((Transform)Instantiate (
+				prefab, new Vector3 (0f, 0f, -100f), Quaternion.identity));		
+				}
+				enabled = false;
+		}
+
+		private void GameStart ()
+		{
+				_nextPosition = startPosition;
+				for (int i = 0; i < numberOfObjects; i++) {
+						Recycle ();
+				}
+				enabled = true;
+		}
+
+		private void GameOver ()
+		{
+				enabled = false;
+		}
+		// Update is called once per frame
+		void Update ()
+		{
+				if (_objectQueue.Peek ().localPosition.x + recycleOffset < Runner.distanceTraveled) {
+						Recycle ();
+			
+				}
+		}
+
+		/// <summary>
+		/// Recycles our platforms when off screen
+		/// </summary>
+		void Recycle ()
+		{
+				Vector3 scale = new Vector3 (
+			Random.Range (minSize.x, maxSize.x),
+			Random.Range (minSize.y, maxSize.y),
+			Random.Range (minSize.z, maxSize.z)
+				);
+				Vector3 position = _nextPosition;
+				position.x += scale.x * 0.5f;
+				position.y += scale.y * 0.5f;
+				powerup.SpawnIfAvailable (position);
+				
+				Transform o = _objectQueue.Dequeue ();
+				o.localScale = scale;
+				o.localPosition = position;
+				int materialIndex = Random.Range (0, materials.Length);
+				o.renderer.material = materials [materialIndex];
+				o.collider.material = physicMaterials [materialIndex];
+				_nextPosition.x += scale.x;
+				_objectQueue.Enqueue (o);
+
+				_nextPosition += new Vector3 (
+			Random.Range (minGap.x, maxGap.x) + scale.x,
+			Random.Range (minGap.y, maxGap.y),
+			Random.Range (minGap.z, maxGap.z));
+
+				if (_nextPosition.y < minY) {
+						_nextPosition.y = minY + maxGap.y;
+				} else if (_nextPosition.y > maxY) {
+						_nextPosition.y = maxY - maxGap.y;
+				}
+		}
+}
