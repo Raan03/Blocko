@@ -1,34 +1,39 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Handles our particles to look less bland
-/// </summary>
-public class ParticleManager : MonoBehaviour
+namespace AssemblyCSharp.Managers
 {
+	/// <summary>
+	/// Handles our particles to look less bland
+	/// </summary>
+	public class ParticleManager : MonoBehaviour
+	{
 		public ParticleSystem[] particleSystems;
 		// Use this for initialization
 		void Start ()
 		{
-				GameEventManager.GameStart += GameStart;
-				GameEventManager.GameOver += GameOver;
-				GameOver ();
+			GameEventManager.GameStart += GameStart;
+			GameEventManager.GameOver += GameOver;
+			GameOver ();
 		}
+
 		void GameStart ()
 		{
-				for (int i = 0; i < particleSystems.Length; i++) {
-						particleSystems [i].Clear ();
-						particleSystems [i].enableEmission = true;
-				}
+			for (int i = 0; i < particleSystems.Length; i++) {
+				particleSystems [i].Clear ();
+				particleSystems [i].enableEmission = true;
+			}
 		}
+
 		void GameOver ()
 		{
-				for (int i = 0; i < particleSystems.Length; i++) {
-						particleSystems [i].enableEmission = false;
-				}
+			for (int i = 0; i < particleSystems.Length; i++) {
+				particleSystems [i].enableEmission = false;
+			}
 		}
 		// Update is called once per frame
 		void Update ()
 		{
 	
 		}
+	}
 }

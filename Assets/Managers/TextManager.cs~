@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Handles our disclaimer text on start up
-/// </summary>
-public class TextManager : MonoBehaviour
+namespace AssemblyCSharp.Managers
 {
-		public GUIText disclaimer;
-		void Update ()
+		/// <summary>
+		/// Handles our disclaimer text on start up
+		/// </summary>
+		public class TextManager : MonoBehaviour
 		{
-				if (Time.time > 5)
-						Application.LoadLevel (1);
+				public GUIText disclaimer;
+
+				void Update ()
+				{
+						if (Time.time > 5)
+								Application.LoadLevel (1);
+				}
 		}
 }
