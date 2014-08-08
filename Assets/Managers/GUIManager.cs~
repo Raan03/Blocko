@@ -9,7 +9,8 @@ namespace AssemblyCSharp.Managers
 				public GUIText powerUpText, distanceText, gameOverText, instructionsText, blockoText, musicText;
 				public MeshRenderer corporateLogo;
 				static GUIManager instance = null;
-				GA _google = new GA ();
+				GA _google;
+
 
 				// Use this for initialization
 				void Start ()
@@ -23,8 +24,11 @@ namespace AssemblyCSharp.Managers
 								instructionsText.text = "Double tap to start.";
 						}
 
-						if (null != GA.instance)
+						if (null != GA.instance) {
+								//_google = 
+								_google = GA.instance;		
 								_google.LogScreen ("Accessed Main Menu.");
+						}
 
 				}
 	
@@ -77,7 +81,9 @@ namespace AssemblyCSharp.Managers
 
 				public static void SetMusic (string nowPlaying)
 				{
-						instance.musicText.text = string.Format ("Now Playing: {0}", nowPlaying);
+						if (null != instance) {
+								instance.musicText.text = string.Format ("Now Playing: {0}", nowPlaying);
+						}
 				}
 
 				/// <summary>
@@ -90,9 +96,9 @@ namespace AssemblyCSharp.Managers
 						enabled = true;
 						if (null != GA.instance)
 								GA.instance.LogScreen (
-										string.Format ("Has died. Distance: {0} PowerUps: {1}", 
-												instance.distanceText.text, 
-												instance.powerUpText.text));
+					string.Format ("Has died. Distance: {0} PowerUps: {1}", 
+						instance.distanceText.text, 
+						instance.powerUpText.text));
 				}
 		}
 }

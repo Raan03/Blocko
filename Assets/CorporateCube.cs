@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// This handles the spinning of our CorporateCube!
-/// </summary>
-public class CorporateCube : MonoBehaviour
+namespace AssemblyCSharp
 {
+	/// <summary>
+	/// This handles the spinning of our CorporateCube!
+	/// </summary>
+	public class CorporateCube : MonoBehaviour
+	{
 		public Vector3 rotationVelocity;
 		// Use this for initialization
 		void Start ()
@@ -15,6 +17,7 @@ public class CorporateCube : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
-				transform.Rotate (rotationVelocity * Time.deltaTime);
+			transform.Rotate (rotationVelocity * Time.deltaTime);
 		}
+	}
 }
