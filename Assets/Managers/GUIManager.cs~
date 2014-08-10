@@ -6,7 +6,7 @@ namespace AssemblyCSharp.Managers
 {
 		public class GUIManager : MonoBehaviour
 		{
-				public GUIText powerUpText, distanceText, gameOverText, instructionsText, blockoText, musicText;
+				public GUIText powerUpText, distanceText, maximumDistanceText, gameOverText, instructionsText, blockoText, musicText;
 				public MeshRenderer corporateLogo;
 				static GUIManager instance = null;
 				GA _google;
@@ -38,7 +38,7 @@ namespace AssemblyCSharp.Managers
 						// Logic depends on our platform
 						switch (Application.platform) {
 						case RuntimePlatform.Android:		
-			// we tapped
+				// we tapped
 								if (Input.touchCount > 0) {			
 										// we double tapped
 										if (Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch (0).tapCount == 2) {
@@ -78,7 +78,10 @@ namespace AssemblyCSharp.Managers
 				{
 						instance.distanceText.text = string.Format ("Distance: {0}", distance.ToString ("f0"));
 				}
-
+				public static void SetMaximumDistance (float maximumDistance)
+				{
+						instance.maximumDistanceText.text = string.Format ("Maximum Distance: {0}", maximumDistance.ToString ("f0"));
+				}
 				public static void SetMusic (string nowPlaying)
 				{
 						if (null != instance) {

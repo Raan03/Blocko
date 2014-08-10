@@ -15,6 +15,7 @@ namespace AssemblyCSharp.Runner
 				public float gameOverY;
 				static int boosts;
 				Vector3 _startPosition;
+				float _maximumDistanceTraveled;
 				bool _touchingPlatform;
 
 				void FixedUpdate ()
@@ -76,7 +77,11 @@ namespace AssemblyCSharp.Runner
 						}
 
 						distanceTraveled = transform.localPosition.x;
+						if (distanceTraveled > _maximumDistanceTraveled) {
+								_maximumDistanceTraveled = distanceTraveled;
+						}
 						MA.GUIManager.SetDistance (distanceTraveled);
+						MA.GUIManager.SetMaximumDistance (_maximumDistanceTraveled);
 						// we fell into oblivion!
 						if (transform.localPosition.y < gameOverY) {
 								MA.GameEventManager.TriggerGameOver ();
@@ -103,6 +108,7 @@ namespace AssemblyCSharp.Runner
 						renderer.enabled = true;
 						rigidbody.isKinematic = false;
 						enabled = true;
+						LoadMaximumDistanceTraveled ();
 				}
 
 				public static void AddBoost ()
@@ -116,6 +122,17 @@ namespace AssemblyCSharp.Runner
 						renderer.enabled = false;
 						rigidbody.isKinematic = true;
 						enabled = false;
+						SaveMaximumDistanceTraveled ();
+						SaveMaximumDistanceTraveled ();
+				}
+				void LoadMaximumDistanceTraveled ()
+				{
+						_maximumDistanceTraveled = PlayerPrefs.GetFloat ("_maximumDistanceTraveled", 0);
+				}
+				void SaveMaximumDistanceTraveled ()
+				{
+						PlayerPrefs.SetFloat ("_maximumDistanceTraveled", _maximumDistanceTraveled);
 				}
 		}
+
 }
