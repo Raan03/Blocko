@@ -1,4 +1,4 @@
-﻿namespace AssemblyCSharp.Managers
+﻿namespace Assets.Managers
 {
 	/// <summary>
 	/// Handles our Game Events

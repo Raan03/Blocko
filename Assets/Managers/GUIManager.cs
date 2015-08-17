@@ -1,107 +1,141 @@
 ﻿using UnityEngine;
-using GA = AssemblyCSharpfirstpass.Plugins.GoogleAnalytics.GoogleAnalytics;
-using AM = AssemblyCSharpfirstpass.Plugins.AdMobPlugin.AdMobPluginDemoScript;
 
-namespace AssemblyCSharp.Managers
+namespace Assets.Managers
 {
-		public class GUIManager : MonoBehaviour
-		{
-				public GUIText powerUpText, distanceText, maximumDistanceText, gameOverText, instructionsText, blockoText, musicText;
-				public MeshRenderer corporateLogo;
-				static GUIManager instance = null;
-				GA _google;
+    public class GuiManager : MonoBehaviour
+    {
+        private static GuiManager _instance;
+        public GUIText BlockoText;
+        public MeshRenderer CorporateLogo;
+        public GUIText DistanceText;
+        public GUIText GameOverText;
+        public GUIText InstructionsText;
+        public GUIText MaximumDistanceText;
+        public GUIText MusicText;
+        public GUIText PowerUpText;
 
+        // Use this for initialization 
+        private void Start()
+        {
+            _instance = this;
 
-				// Use this for initialization
-				void Start ()
-				{
-						instance = this;
-						GameEventManager.GameStart += GameStart;
-						GameEventManager.GameOver += GameOver;
-						gameOverText.enabled = false;
-						corporateLogo.enabled = true;
-						if (Application.platform == RuntimePlatform.Android) {
-								instructionsText.text = "Double tap to start.";
-						}
+            GameEventManager.GameStart += GameStart;
+            GameEventManager.GameOver += GameOver;
 
-						if (null != GA.instance) {
-								//_google = 
-								_google = GA.instance;		
-								_google.LogScreen ("Accessed Main Menu.");
-						}
+            GameOverText.enabled = false;
+            CorporateLogo.enabled = true;
 
-				}
-	
-				// Update is called once per frame
-				void Update ()
-				{
-						// Logic depends on our platform
-						switch (Application.platform) {
-						case RuntimePlatform.Android:		
-				// we tapped
-								if (Input.touchCount > 0) {			
-										// we double tapped
-										if (Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch (0).tapCount == 2) {
-												GameEventManager.TriggerGameStart ();
-										}
-								}
-								break;
-						default:
-								if (Input.GetButtonDown ("Jump")) {
-										GameEventManager.TriggerGameStart ();
-								}
-								break;
-						}
-				}
+            _instance.MusicText.fontSize = Mathf.Min(Screen.height, Screen.width) /
+     _instance.MusicText.fontSize;
 
-				/// <summary>
-				/// Handles what should be done when starting the game
-				/// </summary>
-				void GameStart ()
-				{
+            _instance.PowerUpText.fontSize = Mathf.Min(Screen.height, Screen.width) /
+                                         _instance.PowerUpText.fontSize;
 
-						corporateLogo.enabled = false;
-						gameOverText.enabled = false;
-						instructionsText.enabled = false;
-						blockoText.enabled = false;
-						enabled = false;
-						if (GA.instance)
-								GA.instance.LogScreen ("Started game.");
-				}
+            _instance.MaximumDistanceText.fontSize = Mathf.Min(Screen.height, Screen.width) /
+                                         _instance.MaximumDistanceText.fontSize;
 
-				public static void SetPowerUps (int powerUp)
-				{
-						instance.powerUpText.text = string.Format ("PowerUps: {0}", powerUp.ToString ());
-				}
+            _instance.DistanceText.fontSize = Mathf.Min(Screen.height, Screen.width) /
+                             _instance.DistanceText.fontSize;
 
-				public static void SetDistance (float distance)
-				{
-						instance.distanceText.text = string.Format ("Distance: {0}", distance.ToString ("f0"));
-				}
-				public static void SetMaximumDistance (float maximumDistance)
-				{
-						instance.maximumDistanceText.text = string.Format ("Maximum Distance: {0}", maximumDistance.ToString ("f0"));
-				}
-				public static void SetMusic (string nowPlaying)
-				{
-						if (null != instance) {
-								instance.musicText.text = string.Format ("Now Playing: {0}", nowPlaying);
-						}
-				}
+            // for android. 
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                InstructionsText.text = "Double tap to start.";
+            }
+        }
 
-				/// <summary>
-				/// Handles what should be done when the Game is over
-				/// </summary>
-				void GameOver ()
-				{
-						gameOverText.enabled = true;
-						instructionsText.enabled = true;
-						enabled = true;
-						if (null != GA.instance)
-								GA.instance.LogScreen (
-					string.Format ("Has died. Distance: {0} PowerUps: {1}", 
-						instance.distanceText.text, 
-						instance.powerUpText.text));
-				}
-		}
+        // Update is called once per frame 
+        private void Update()
+        {
+            // Logic depends on our platform 
+            switch (Application.platform)
+            {
+                case RuntimePlatform.Android:
+
+                    // we tapped 
+                    if (Input.touchCount > 0)
+                    {
+                        // we double tapped 
+                        if (Input.GetTouch(0).phase == TouchPhase.Began && Input.GetTouch(0).tapCount == 2)
+                        {
+                            GameEventManager.TriggerGameStart();
+                        }
+                    }
+                    break;
+
+                default:
+                    if (Input.GetButtonDown("Jump"))
+                    {
+                        GameEventManager.TriggerGameStart();
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handles what should be done when starting the game 
+        /// </summary>
+        private void GameStart()
+        {
+            CorporateLogo.enabled = false;
+            GameOverText.enabled = false;
+            InstructionsText.enabled = false;
+            BlockoText.enabled = false;
+            enabled = false;
+        }
+
+        // draw powerups text on screen 
+        public static void SetPowerUps(int powerUp)
+        {
+            if (null == _instance)
+            {
+                return;
+            }
+            _instance.PowerUpText.text = string.Format("PowerUps: {0}", powerUp);
+
+        }
+
+        // draw distance text on screen 
+        public static void SetDistance(float distance)
+        {
+            if (null == _instance)
+            {
+                return;
+            }
+            _instance.DistanceText.text = string.Format("Distance: {0}", distance.ToString("f0"));
+
+        }
+
+        // draw maximum achieved distance on screen 
+        public static void SetMaximumDistance(float maximumDistance)
+        {
+            if (null == _instance)
+            {
+                return;
+            }
+            _instance.MaximumDistanceText.text = string.Format("Maximum Distance: {0}", maximumDistance.ToString("f0"));
+
+        }
+
+        // What is playing now, Einstein? 
+        public static void SetMusic(string nowPlaying)
+        {
+            if (null == _instance)
+            {
+                return;
+            }
+
+            _instance.MusicText.text = string.Format("Now Playing: {0}", nowPlaying);
+        }
+
+        /// <summary>
+        /// Handles what should be done when the Game is over 
+        /// </summary>
+        private void GameOver()
+        {
+            GameOverText.enabled = true;
+            InstructionsText.enabled = true;
+            enabled = true;
+        }
+    }
 }

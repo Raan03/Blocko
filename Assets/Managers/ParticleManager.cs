@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace AssemblyCSharp.Managers
+namespace Assets.Managers
 {
 	/// <summary>
 	/// Handles our particles to look less bland
 	/// </summary>
 	public class ParticleManager : MonoBehaviour
 	{
-		public ParticleSystem[] particleSystems;
+		public ParticleSystem[] ParticleSystems;
 		// Use this for initialization
 		void Start ()
 		{
@@ -17,18 +17,20 @@ namespace AssemblyCSharp.Managers
 		}
 
 		void GameStart ()
-		{
-			for (int i = 0; i < particleSystems.Length; i++) {
-				particleSystems [i].Clear ();
-				particleSystems [i].enableEmission = true;
-			}
+        { 
+            foreach(var pSystem in ParticleSystems)
+            {
+                pSystem.Clear();
+                pSystem.enableEmission = true;
+            }
 		}
 
 		void GameOver ()
 		{
-			for (int i = 0; i < particleSystems.Length; i++) {
-				particleSystems [i].enableEmission = false;
-			}
+		    foreach (var pSystem in ParticleSystems)
+		    {
+		        pSystem.enableEmission = false;
+		    }
 		}
 		// Update is called once per frame
 		void Update ()
